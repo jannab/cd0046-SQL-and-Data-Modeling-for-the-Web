@@ -219,7 +219,7 @@ def create_venue_submission():
     return render_template('pages/home.html')
 
 
-@app.route('/venues/<venue_id>', methods=['DELETE'])
+@app.route('/venues/<venue_id>/delete', methods=['GET', 'DELETE'])
 def delete_venue(venue_id):
     error = False
 

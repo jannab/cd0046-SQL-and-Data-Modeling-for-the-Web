@@ -26,7 +26,8 @@ class Venue(db.Model):
     seeking_description = db.Column(db.String(500))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    shows = db.relationship('Show', backref='venue', lazy=True)
+    shows = db.relationship('Show', backref='venue', lazy=True,
+                            cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<Venue id: {self.id} name: {self.name}>'
