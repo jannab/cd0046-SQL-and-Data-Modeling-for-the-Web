@@ -296,31 +296,25 @@ def edit_artist(artist_id):
 def edit_artist_submission(artist_id):
     error = False
     artist = Artist.query.filter(Artist.id == artist_id).one_or_none()
+    form = ArtistForm(request.form, meta={'csrf': False})
 
-    try:
-        artist.name = request.form['name']
-        artist.city = request.form['city']
-        artist.state = request.form['state']
-        artist.phone = request.form['phone']
-        artist.genres = request.form.getlist('genres')
-        artist.image_link = request.form['image_link']
-        artist.facebook_link = request.form['facebook_link']
-        artist.website_link = request.form['website_link']
-        seeking_venue = True if 'seeking_venue' in request.form else False
-        artist.seeking_venue = seeking_venue
-        artist.seeking_description = request.form['seeking_description']
+    if form.validate():
+        try:
+            form.populate_obj(artist)
+            db.session.commit()
 
-        db.session.commit()
+        except Exception:
+            error = True
+            db.session.rollback()
 
-    except Exception:
+        finally:
+            db.session.close()
+
+    else:
         error = True
-        db.session.rollback()
-
-    finally:
-        db.session.close()
 
     if error:
-        flash('An error occurred. Artist could not be updated.')
+        flash(f'An error occurred. Artist could not be updated.')
     else:
         flash('Artist ' + request.form['name'] + ' was successfully updated!')
 
@@ -343,29 +337,19 @@ def edit_venue(venue_id):
 def edit_venue_submission(venue_id):
     error = False
     venue = Venue.query.filter(Venue.id == venue_id).one_or_none()
+    form = VenueForm(request.form, meta={'csrf': False})
 
-    try:
-        venue.name = request.form['name']
-        venue.city = request.form['city']
-        venue.state = request.form['state']
-        venue.address = request.form['address']
-        venue.phone = request.form['phone']
-        venue.genres = request.form.getlist('genres')
-        venue.image_link = request.form['image_link']
-        venue.facebook_link = request.form['facebook_link']
-        venue.website_link = request.form['website_link']
-        seeking_talent = True if 'seeking_talent' in request.form else False
-        venue.seeking_talent = seeking_talent
-        venue.seeking_description = request.form['seeking_description']
+    if form.validate():
+        try:
+            form.populate_obj(venue)
+            db.session.commit()
 
-        db.session.commit()
+        except Exception:
+            error = True
+            db.session.rollback()
 
-    except Exception:
-        error = True
-        db.session.rollback()
-
-    finally:
-        db.session.close()
+        finally:
+            db.session.close()
 
     if error:
         flash('An error occurred. Venue could not be updated.')
@@ -384,8 +368,8 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
     error = False
-
     form = ArtistForm(request.form, meta={'csrf': False})
+
     if form.validate():
         try:
             artist = Artist(name=form.name.data,
