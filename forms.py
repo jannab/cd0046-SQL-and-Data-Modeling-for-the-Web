@@ -22,7 +22,7 @@ def is_valid_phone(number):
 
     Note: (? = optional) - Learn more: https://regex101.com/
     """
-    regex = re.compile('^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$')
+    regex = re.compile(r'^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$')
     return regex.match(number)
 
 
