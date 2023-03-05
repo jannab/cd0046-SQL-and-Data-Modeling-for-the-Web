@@ -192,18 +192,8 @@ def create_venue_submission():
 
     if form.validate():
         try:
-            venue = Venue(name=form.name.data,
-                          city=form.city.data,
-                          state=form.state.data,
-                          address=form.address.data,
-                          phone=form.phone.data,
-                          genres=form.genres.data,
-                          website_link=form.website_link.data,
-                          seeking_talent=form.seeking_talent.data,
-                          seeking_description=form.seeking_description.data,
-                          image_link=form.image_link.data,
-                          facebook_link=form.facebook_link.data)
-
+            venue = Venue()
+            form.populate_obj(venue)
             db.session.add(venue)
             db.session.commit()
 
@@ -372,17 +362,8 @@ def create_artist_submission():
 
     if form.validate():
         try:
-            artist = Artist(name=form.name.data,
-                            city=form.city.data,
-                            state=form.state.data,
-                            phone=form.phone.data,
-                            genres=form.genres.data,
-                            website_link=form.website_link.data,
-                            seeking_venue=form.seeking_venue.data,
-                            seeking_description=form.seeking_description.data,
-                            image_link=form.image_link.data,
-                            facebook_link=form.facebook_link.data)
-
+            artist = Artist()
+            form.populate_obj(artist)
             db.session.add(artist)
             db.session.commit()
 
@@ -427,10 +408,8 @@ def create_show_submission():
 
     if form.validate():
         try:
-            show = Show(artist_id=form.artist_id.data,
-                        venue_id=form.venue_id.data,
-                        start_time=form.start_time.data)
-
+            show = Show()
+            form.populate_obj(show)
             db.session.add(show)
             db.session.commit()
 
